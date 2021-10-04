@@ -1,1 +1,1 @@
-console.log("index: loaded");
+console.log("index.js: ロードしたよ");
