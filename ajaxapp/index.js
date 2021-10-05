@@ -1,8 +1,12 @@
-function main() {
-    fetchUserId("js-primer-example")
-        .catch((error) => {
-            console.error(`エラー発生した(${error})`);
-        }); 
+async function main() {
+    try {
+        const userId = getUserId();
+        const userInfo = await fetchUserId(userId);
+        const view = createView(userInfo);
+        displayView(view);
+    } catch (error) {
+        console.error(`エラーが発生 (${error})`)
+    }
 }
 
 function fetchUserId(userId) {
@@ -11,15 +15,15 @@ function fetchUserId(userId) {
             console.log(response.status);
 
             if (!response.ok) {
-                console.log("エラーレスポンス", response)
+                return Promise.reject(new Error(`${response.status}: ${response.statusText}`))
             } else {
-                return response.json().then(userInfo => {
-                    const view = createView(userInfo);
-                    displayView(view);     
-                });
-            
+                return response.json();
         }
     });
+}
+
+function getUserId() {
+    return document.getElementById("userId").value;
 }
 
 function createView(userInfo) {
